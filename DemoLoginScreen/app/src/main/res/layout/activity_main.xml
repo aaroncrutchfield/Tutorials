@@ -54,9 +54,10 @@
         android:id="@+id/tv_name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="@string/name"
         android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse"
         android:visibility="invisible"
+        android:labelFor="@id/et_name"
         app:layout_constraintBottom_toTopOf="@+id/et_name"
         app:layout_constraintStart_toStartOf="@+id/et_name" />
 
@@ -64,7 +65,8 @@
         android:id="@+id/tv_email_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email"
+        android:text="@string/email"
+        android:labelFor="@id/et_email"
         android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse"
         app:layout_constraintBottom_toTopOf="@+id/et_email"
         app:layout_constraintStart_toStartOf="@+id/et_email" />
@@ -73,7 +75,8 @@
         android:id="@+id/et_password_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password"
+        android:text="@string/password"
+        android:labelFor="@id/et_password"
         android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse"
         app:layout_constraintBottom_toTopOf="@+id/et_password"
         app:layout_constraintStart_toStartOf="@+id/et_password" />
@@ -92,7 +95,7 @@
         android:layout_height="60dp"
         android:background="@color/colorPrimaryDark"
         android:onClick="showRegistration"
-        android:text="REGISTER"
+        android:text="@string/register"
         android:textColor="@android:color/background_light"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -106,7 +109,7 @@
         android:layout_height="60dp"
         android:background="@color/colorPrimaryDark"
         android:onClick="showLogin"
-        android:text="LOGIN"
+        android:text="@string/login"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +124,7 @@
         android:layout_marginBottom="80dp"
         android:background="@color/colorAccent"
         android:onClick="submit"
-        android:text="LOGIN"
+        android:text="@string/login"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -138,6 +141,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_register"
         app:layout_constraintVertical_bias="0.25"
-        app:srcCompat="@drawable/user" />
+        app:srcCompat="@drawable/user"
+        android:contentDescription="@string/user_image" />
 
 </android.support.constraint.ConstraintLayout>

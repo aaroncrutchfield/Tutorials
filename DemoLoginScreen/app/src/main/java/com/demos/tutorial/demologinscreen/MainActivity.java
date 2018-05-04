@@ -1,7 +1,5 @@
 package com.demos.tutorial.demologinscreen;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,19 +18,24 @@ import com.demos.tutorial.demologinscreen.data.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
+    // EditTexts
     private EditText etName;
     private EditText etEmail;
     private EditText etPassword;
 
+    // TextViews
     private TextView tvNameLabel;
 
+    // Buttons
     private Button btnLogin;
     private Button btnRegister;
     private Button btnSubmit;
 
-    public static boolean isLogin = true;
+    // Boolean to notify us if we are logging in or signing up
+    private static boolean isLogin = true;
 
-    UserViewModel userViewModel;
+    // Our ViewModel for managing our UI-related data in a lifecycle conscious way
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +53,21 @@ public class MainActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register);
         btnSubmit = findViewById(R.id.btn_submit);
 
-        // Get an instance of the ViewModel
+        // Setup the app database, dao, and repository
         AppDatabase appDatabase = AppDatabase.getAppDatabase(this);
         UserDao userDao = appDatabase.userDao();
-
         UserRepository userRepository = new UserRepository(userDao);
+
+        // Get an instance of the ViewModel from the provider
+        // This associates your ViewModel with your UI controller (Activity)
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         userViewModel.setRepository(userRepository);
     }
 
+    /**
+     * Shows the views necessary for registering a new account after clicking the register option
+     * @param view
+     */
     public void showRegistration(View view) {
         String text = btnRegister.getText().toString();
 
@@ -74,23 +83,32 @@ public class MainActivity extends AppCompatActivity {
         isLogin = false;
     }
 
+    /**
+     * Shows the views necessary for logging in after clicking the login option
+     * @param view
+     */
     public void showLogin(View view) {
-        String text = btnLogin.getText().toString();
 
         // Change the color of the button text
         btnLogin.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
         btnRegister.setTextColor(ContextCompat.getColor(this, R.color.white));
 
         // Set submit button text
+        String text = btnLogin.getText().toString();
         btnSubmit.setText(text);
 
         // Hide the name field
         tvNameLabel.setVisibility(View.INVISIBLE);
         etName.setVisibility(View.INVISIBLE);
 
+        // Set true because we are logging in
         isLogin = true;
     }
 
+    /**
+     * Submits the data entered in the EditText fields for logging in or registering
+     * @param view
+     */
     public void submit(View view) {
         if (isLogin) {
             login();
@@ -99,52 +117,61 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Retrieves the information entered in the EditText fields and enters it into the database.
+     * Alerts the user if all of the fields aren't filled in.
+     */
     private void registerNewUser() {
         // Attempt to get the user's information
         String name = etName.getText().toString();
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
 
-        // Generate an error message if the user leaves one of the fields blank
-        String errorMessage;
+        // Generate an appropriate message if the user leaves one of the fields blank
+        String message;
         if (name.equals("")) {
-            errorMessage = "Please insert a valid name";
+            message = "Please insert a valid name";
         }
         else if (email.equals("")) {
-            errorMessage = "Please insert a valid email";
+            message = "Please insert a valid email";
         }
         else if (password.equals("")) {
-            errorMessage = "Please insert a valid password";
+            message = "Please insert a valid password";
         }
         else {
             // Enter the user into the database
             User user = new User(name, email, password);
-            // TODO: 4/30/2018 registerNewUser() - Insert new user in Database
             userViewModel.insertUser(user);
-            errorMessage = name + " registered";
+
+            message = name + " registered";
         }
 
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Checks the database for an existing user with a matching email and password
+     */
     private void login() {
+        // Retrieve the email and password from the user
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
 
-        String errorMessage;
+        // Notify the user if all the fields aren't entered
+        String message;
         if (email.equals("") | password.equals("")) {
-            errorMessage = "Please fill the email and password fields";
+            message = "Please fill the email and password fields";
         } else {
             // Check if the user exists in the database
             User user = userViewModel.getUserByEmail(email, password);
             if (user != null) {
-                errorMessage = "Welcome " + user.getName() + "!";
+                message = "Welcome " + user.getName() + "!";
             } else {
-                errorMessage = "Invalid email and password combination";
+                message = "Invalid email and password combination";
             }
 
         }
 
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

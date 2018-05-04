@@ -6,12 +6,13 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 /**
- * Created by Aaron Crutchfield on 4/30/2018.
+ * POJO that represents a table within the database. Each variable represents a column in the table
  */
 @Entity
 public class User {
     @PrimaryKey
     @NonNull
+    // Email will be the primary key since this is the unique way we will identify each user
     private String email;
     @ColumnInfo
     private String name;
